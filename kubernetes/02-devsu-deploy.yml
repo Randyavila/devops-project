@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devsu
+  namespace: devsu
+  labels:
+    app: devsu
+spec:
+  replicas: 2
+  selector:
+   matchLabels:
+    app: devsu
+  template:
+    metadata:
+      labels:
+        app: devsu
+    spec:
+      #serviceAccountName: devsu-app
+      containers:
+        - name: devsu-images-app
+          image: randyavs/devops-project-web
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "100m"
+            limits:
+              memory: "200Mi"
+              cpu: "200m"
+          ports:
+            - containerPort: 8000
+              name: devsuappport
+          command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+      

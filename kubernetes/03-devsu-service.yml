@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+ name: devsu
+ namespace: devsu
+ labels:
+    app: devsu
+spec:
+ selector:
+   app: devsu
+ type: LoadBalancer
+ ports:
+   - port: 8000
+     targetPort: 8000
+     protocol: TCP
