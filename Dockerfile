@@ -9,9 +9,7 @@ COPY . /app
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
+RUN python manage.py makemigrations
 
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
-
-# Run app.py when the container launches
-CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
