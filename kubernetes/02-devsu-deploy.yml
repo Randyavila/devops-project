@@ -15,17 +15,16 @@ spec:
       labels:
         app: devsu
     spec:
-      #serviceAccountName: devsu-app
       containers:
-        - name: devsu-images-app
-          image: randyavs/devops-project-web
+        - name: devsu-app
+          image: randyavs/devops-project-web:latest
           resources:
             requests:
-              memory: "100Mi"
-              cpu: "100m"
-            limits:
               memory: "200Mi"
               cpu: "200m"
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
           ports:
             - containerPort: 8000
               name: devsuappport
