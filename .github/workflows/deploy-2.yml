@@ -87,8 +87,8 @@ jobs:
 
     - name: Pull latest Docker image from DockerHub
       run: |
-        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-django-app:latest
+        docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/my-django-app:latest
 
     - name: Deploy to Docker container
       run: |
-        docker run -d -p 8000:8000 ${{ secrets.DOCKERHUB_USERNAME }}/my-django-app:latest
+        docker run -d -p 8000:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/my-django-app:latest
