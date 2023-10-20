@@ -67,6 +67,5 @@ jobs:
         # now you can run kubectl to see the pods in the cluster
         - name: kubectl commands
           run: |
-            minikube start
             minikube addons enable heapster 
             kubectl apply -f ./kubernetes/ .
