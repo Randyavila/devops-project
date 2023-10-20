@@ -59,14 +59,14 @@ jobs:
 
  deploy:
     runs-on: ubuntu-latest
+    needs: [build]
     steps:
-    - uses: actions/checkout@master
-    - uses: opsgang/ga-setup-minikube@v0.1.1
-      with:
-        minikube-version: 1.4.0
-        k8s-version: 1.15.1
-    - name: Deploying
-      run: |
-        minikube start
-        minikube addons enable heapster 
-        kubectl apply -f ./kubernetes/ .
+        - name: start minikube
+          id: minikube
+          uses: medyagh/setup-minikube@latest
+        # now you can run kubectl to see the pods in the cluster
+        - name: kubectl commands
+          run: |
+            minikube start
+            minikube addons enable heapster 
+            kubectl apply -f ./kubernetes/ .
