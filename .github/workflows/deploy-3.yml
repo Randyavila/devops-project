@@ -69,7 +69,10 @@ jobs:
         with:
           key: pip-cache
           path: ~/.cache/pip
-      - run: pip install --upgrade pip
+      - name: Install dependencies and run migrations
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
       - run: pip install pylint flake8 coverage pytest-cov
       - run: flake8 ./api/*.py  --count --max-complexity=15 --max-line-length=127 --statistics #--ignore=W291
      # - run: pylint ./api/*.py
