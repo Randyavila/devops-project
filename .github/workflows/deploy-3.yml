@@ -74,8 +74,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - run: pip install pylint flake8 coverage pytest-cov
-      - run: flake8 ./api/*.py  --count --max-complexity=15 --max-line-length=127 --statistics #--ignore=W291
-     # - run: pylint ./api/*.py
+      - run: flake8 ./api/*.py  --count --max-complexity=15 --max-line-length=127 --statistics
+      - run: flake8 ./**/*.py  --count --max-complexity=15 --max-line-length=127 --statistics > flake8-report.txt
+      - run: cat flake8-report.txt
+      - run: pylint ./**/*.py
       - run: coverage run manage.py test
       - run: coverage report -m
       - uses: actions/upload-artifact@v3
