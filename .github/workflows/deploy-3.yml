@@ -9,7 +9,7 @@ on:
 jobs:
  unit-test:
     runs-on: ubuntu-latest
-   
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -51,14 +51,14 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{secrets.DOCKER_HUB_USERNAME}}/my-django-app:latest   
+        tags: ${{secrets.DOCKER_HUB_USERNAME}}/my-django-app:latest
     # - name: Push Docker image to DockerHub
     #   run: |
     #     docker tag my-django-app ${{ secrets.DOCKERHUB_USERNAME }}/my-django-app:latest
     #     docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-django-app:latest
 
  code-analysis:
-  
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -71,9 +71,9 @@ jobs:
           path: ~/.cache/pip
       - run: pip install --upgrade pip
       - run: pip install pylint flake8 coverage pytest-cov
-      - run: flake8 ./api/*.py  --count --max-complexity=15 --max-line-length=127 --statistics
+      - run: flake8 ./api/*.py  --count --max-complexity=15 --max-line-length=127 --statistics #--ignore=W291
      # - run: pylint ./api/*.py
-      - run: coverage run -m pytest ./api/tests.py
+      - run: coverage run manage.py test
       - run: coverage report -m
       - uses: actions/upload-artifact@v3
         with:
@@ -95,6 +95,6 @@ jobs:
         # now you can run kubectl to see the pods in the cluster
         - name: kubectl commands
           run: |
-            minikube addons enable heapster 
+            minikube addons enable heapster
             kubectl apply -f ./kubernetes/
             kubectl get all -n devsu
