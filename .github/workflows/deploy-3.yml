@@ -61,22 +61,28 @@ jobs:
   
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
         with:
-          python-version: 3.11.3
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install flake8
-          python manage.py makemigrations
-          python manage.py migrate
-      - name: Lint with flake8
-        run: |
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          python-version: 3.10
+      - uses: actions/cache@v3
+        with:
+          key: pip-cache
+          path: ~/.cache/pip
+      - run: pip install --upgrade pip
+      - run: pip install pylint flake8 coverage pytest-cov
+      - run: pylint ./my_app/**/*.py
+      - run: flake8 ./my_app/**/*.py
+      - run: coverage run -m pytest tests/
+      - run: coverage report -m
+      - uses: actions/upload-artifact@v3
+        with:
+          name: pylint-report
+          path: pylint.html
+      - uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage-report
+          path: htmlcov/index.html
 
  deploy:
     runs-on: ubuntu-latest
