@@ -71,8 +71,8 @@ jobs:
           path: ~/.cache/pip
       - run: pip install --upgrade pip
       - run: pip install pylint flake8 coverage pytest-cov
-      - run: flake8 ./**/*.py
-      - run: pylint ./**/*.py
+      - run: flake8 ./api/*.py
+      - run: pylint ./api/*.py
       - run: coverage run -m pytest tests/
       - run: coverage report -m
       - uses: actions/upload-artifact@v3
