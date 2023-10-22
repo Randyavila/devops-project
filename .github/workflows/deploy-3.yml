@@ -78,7 +78,7 @@ jobs:
       - run: flake8 --output-file=flake8-report.txt ./**/*.py  --count --max-complexity=15 --max-line-length=127 --statistics
       - run: cat flake8-report.txt
       - run: |
-          pylint --output-format=text ./**/*.py  > pylint_output.txt
+          pylint ./**/*.py --output-format=text   > pylint_output.txt
           echo "::set-output name=pylint_output::$(cat pylint_output.txt)"
       - run: coverage run manage.py test
       - run: coverage report -m
