@@ -83,6 +83,8 @@ jobs:
       - run: cat flake8-report.txt
       #Running Pylint command to get Scan Project
       - run: pylint ./**/*.py --output-format=text -r y > pylint_output.txt || true
+      #Cating Pylint report
+      - run: cat pylint_output.txt
       #Runnig Code Coverage
       - run: coverage run manage.py test
       #Geting Coverage Report
