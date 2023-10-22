@@ -77,9 +77,11 @@ jobs:
       - run: flake8 --output-file=flake8-output.txt ./api/*.py  --count --max-complexity=15 --max-line-length=127 --statistics
       - run: flake8 --output-file=flake8-report.txt ./**/*.py  --count --max-complexity=15 --max-line-length=127 --statistics
       - run: cat flake8-report.txt
-      - run: |
-          pylint ./**/*.py --output-format=text   > pylint_output.txt
-          echo "::set-output name=pylint_output::$(cat pylint_output.txt)"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: flake8-report
+          path: flake8-report.txt
+      - run: pylint ./**/*.py --output-format=text   > pylint_output.txt
       - run: coverage run manage.py test
       - run: coverage report -m
       - uses: actions/upload-artifact@v3
