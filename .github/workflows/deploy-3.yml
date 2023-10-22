@@ -7,88 +7,99 @@ on:
        branches: [ "main" ]
 
 jobs:
+    #Unit Testing Step
  unit-test:
     runs-on: ubuntu-latest
-
     steps:
+      #Git Checkout to get tha main brach code
     - name: Checkout repository
       uses: actions/checkout@v3
-
+      #Set Up the Python 3.11.3 environment
     - name: Set up Python 3.11.3
       uses: actions/setup-python@v3
       with:
         python-version: '3.11.3'
-
+      #Install dependencies and running migration
     - name: Install dependencies and run migrations
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         python manage.py makemigrations
         python manage.py migrate
-
+      #Runnig Unit Testing
     - name: Run unit tests
       run: |
         python manage.py test
 
  build:
+      #Build Step
     runs-on: ubuntu-latest
-
     steps:
+      #Git Checkout to get tha main brach code
     - name: Checkout repository
       uses: actions/checkout@v3
-
+      #Build Docker Images to push to the docker hub registry
     - name: Build Docker image
       run: |
-        docker build -t my-django-app .
-
+        docker build -t devops-project-devsu .
+      #Login DockerHub Registry
     - name: Login to DockerHub
       uses: docker/login-action@v3
       with:
         username: ${{secrets.DOCKER_HUB_USERNAME}}
         password: ${{secrets.DOCKER_HUB_PASSWORD }}
+      #Pushing Docker Images
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
         context: .
         push: true
-        tags: ${{secrets.DOCKER_HUB_USERNAME}}/my-django-app:latest
-    # - name: Push Docker image to DockerHub
-    #   run: |
-    #     docker tag my-django-app ${{ secrets.DOCKERHUB_USERNAME }}/my-django-app:latest
-    #     docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-django-app:latest
+        tags: ${{secrets.DOCKER_HUB_USERNAME}}/devops-project-devsu:latest
 
  code-analysis:
-
+      #Code Analysis and Code Coverage Step
     runs-on: ubuntu-latest
     steps:
+      #Git Checkout to get tha main brach code
       - uses: actions/checkout@v3
+      #Set Up the Python 3.11.3 environment
       - uses: actions/setup-python@v3
         with:
           python-version: 3.11.3
+      #Set Up cache into the pipeline for the scan a coverage
       - uses: actions/cache@v3
         with:
           key: pip-cache
           path: ~/.cache/pip
-      - name: Install dependencies and run migrations
-        run: |
+      #Install depencdencies
+      - run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+      #Install Dependencies for Code Static Analysis and Coverage
       - run: pip install pylint flake8 coverage pytest-cov
+      #Running Flake8 command to get Stylus and scan code
       - run: flake8 -v --output-file=flake8-report.txt --max-complexity=15 --max-line-length=127 --statistics  ./**/*.py
+      #Cating flake8 report
       - run: cat flake8-report.txt
+      #Running Pylint command to get Scan Project
       - run: pylint ./**/*.py --output-format=text -r y > pylint_output.txt || true
+      #Runnig Code Coverage
       - run: coverage run manage.py test
+      #Geting Coverage Report
       - run: coverage report -m
 
  deploy:
+  #Deploy Step
     runs-on: ubuntu-latest
     steps:
+         #Git Checkout to get tha main brach code
         - name: Checkout repository
           uses: actions/checkout@v3
+        #Running a minikue cluster
         - name: start minikube
           id: minikube
           uses: medyagh/setup-minikube@latest
-        # now you can run kubectl to see the pods in the cluster
+        # Running kubectl command to put on kubernetes commands
         - name: kubectl commands
           run: |
             minikube addons enable heapster
