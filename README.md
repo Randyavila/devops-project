@@ -2,7 +2,6 @@
 
 This is a test project for devsu company for the Devops Engineer rol.
 
-
 ## Deliverables
 
 [Github Randy Avila Repository ](https://github.com/Randyavila/devops-project).
