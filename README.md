@@ -54,7 +54,7 @@ services:
 
 [Pipeline Document](https://github.com/Randyavila/devops-project/blob/main/.github/workflows/deploy-3.yml):
 
-```json
+```yml
 name: CI/CD Pipeline to Kubernetes
 
 on:
@@ -164,7 +164,6 @@ jobs:
             minikube addons enable heapster
             kubectl apply -f ./kubernetes/
             kubectl get all -n devsu
-
 ```
 
 
